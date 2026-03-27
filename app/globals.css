@@ -1,0 +1,74 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand-red: #ff1100;
+  --color-brand-orange: #ff4a00;
+  --color-bg-dark: #020202;
+}
+
+:root {
+  --foreground-rgb: 255, 255, 255;
+  --background-rgb: 0, 0, 0;
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: rgb(var(--background-rgb));
+  font-family: 'Inter', system-ui, sans-serif;
+  overflow-x: hidden;
+  overscroll-behavior: none;
+  background-color: #000;
+}
+
+/* Hide scrollbar for cinematic feel */
+::-webkit-scrollbar {
+  display: none;
+}
+* {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Premium Typography Classes */
+.hero-title {
+  font-size: clamp(4rem, 12vw, 14rem);
+  font-weight: 900;
+  letter-spacing: -0.06em;
+  line-height: 0.85;
+  text-transform: uppercase;
+}
+
+.sub-title {
+  font-size: clamp(1.5rem, 4vw, 5rem);
+  font-weight: 400;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+}
+
+.metallic-text {
+  background: linear-gradient(180deg, #ffffff 0%, #5a5a5a 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: 0px 10px 30px rgba(255, 255, 255, 0.15);
+}
+
+.hud-text {
+  font-family: monospace;
+  font-size: 0.8rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.glass-panel {
+  background: rgba(5, 5, 5, 0.6);
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+}
+
+canvas {
+  touch-action: none;
+}
