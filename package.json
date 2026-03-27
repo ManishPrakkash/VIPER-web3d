@@ -9,9 +9,9 @@
     "lint": "eslint"
   },
   "dependencies": {
-    "@react-three/drei": "^10.7.7",
-    "@react-three/fiber": "^9.5.0",
-    "@react-three/postprocessing": "^3.0.4",
+    "@react-three/drei": "^9.86.7",
+    "@react-three/fiber": "^8.13.7",
+    "@react-three/postprocessing": "^2.5.5",
     "@studio-freight/react-lenis": "^0.0.47",
     "@types/three": "^0.183.1",
     "clsx": "^2.1.1",
