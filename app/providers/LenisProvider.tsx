@@ -1,6 +1,6 @@
 "use client";
 
-import { ReactLenis, useLenis } from '@studio-freight/react-lenis';
+import { ReactLenis, useLenis } from 'lenis/react';
 import { ReactNode } from 'react';
 import { useScrollStore } from '@/store/useScrollStore';
 
