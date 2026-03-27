@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from "react";
 export default function Overlay() {
   const progress = useScrollStore((state) => state.progress);
   
+  
   // Real-time specs matching progress
   const [rpm, setRpm] = useState(0);
   const [speed, setSpeed] = useState(0);
