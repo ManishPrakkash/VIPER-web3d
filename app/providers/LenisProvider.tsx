@@ -1,13 +1,25 @@
 "use client";
 
 import { ReactLenis, useLenis } from 'lenis/react';
-import { ReactNode } from 'react';
+import { ReactNode, useEffect } from 'react';
 import { useScrollStore } from '@/store/useScrollStore';
 
 function LenisScrollSync() {
   const setProgress = useScrollStore((state) => state.setProgress);
   
-  // Use useLenis animation frame callback to continuously update Zustand state
+  // 1. Force the experience to start at '0%' on page refresh
+  useEffect(() => {
+    // Disable browser's native scroll restoration
+    if ("scrollRestoration" in window.history) {
+      window.history.scrollRestoration = "manual";
+    }
+    
+    // Jump to top immediately and reset our global progress state
+    window.scrollTo(0, 0);
+    setProgress(0);
+  }, [setProgress]);
+
+  // 2. Use useLenis animation frame callback to continuously update Zustand state
   useLenis((e: any) => {
     setProgress(e.progress);
   });
