@@ -6,7 +6,7 @@ import * as THREE from 'three'
 import { useScrollStore } from '@/store/useScrollStore'
 import { easing } from 'maath'
 
-export default function CarModel(props: any) {
+function CarModel(props: any) {
   const { nodes, materials } = useGLTF('/2016_dodge_viper_acr.glb') as any
   const progress = useScrollStore((state) => state.progress)
   
@@ -17,18 +17,15 @@ export default function CarModel(props: any) {
   useEffect(() => {
     const headlightMesh = nodes.car_dodge_viper_acrglass_glass_LOD2_UV1_Untitled_067_Default_glass_light_0;
     if (materials.glass_light && headlightMesh) {
-      // Calculate geometric bounding box specifically for the glass housing
       headlightMesh.geometry.computeBoundingBox();
       const minY = headlightMesh.geometry.boundingBox.min.y;
       const maxY = headlightMesh.geometry.boundingBox.max.y;
-      const targetThreshold = minY + (maxY - minY) * 0.15; // Set to 15% baseline
+      const targetThreshold = minY + (maxY - minY) * 0.15; 
 
       materials.glass_light.onBeforeCompile = (shader: any) => {
-        materials.glass_light.userData.shader = shader; // Save reference for useFrame animation
-        // Inject bound threshold
+        materials.glass_light.userData.shader = shader; 
         shader.uniforms.uGlowThreshold = { value: targetThreshold };
 
-        // Vertex Shader: Export Local Position
         shader.vertexShader = shader.vertexShader.replace(
           `#include <common>`,
           `#include <common>
@@ -39,7 +36,6 @@ export default function CarModel(props: any) {
            vLocalPosition = position;`
         );
 
-        // Fragment Shader: Mask Emission using Local Position varying
         shader.fragmentShader = shader.fragmentShader.replace(
           `#include <common>`,
           `#include <common>
@@ -48,7 +44,6 @@ export default function CarModel(props: any) {
         ).replace(
           `#include <emissivemap_fragment>`,
           `#include <emissivemap_fragment>
-           // Strictly kill the red emissive radiance if it goes BELOW the 50% mark
            if (vLocalPosition.y < uGlowThreshold) {
                totalEmissiveRadiance = vec3(0.0);
            }`
@@ -60,34 +55,26 @@ export default function CarModel(props: any) {
 
   useFrame((state, delta) => {
     if (outerGroup.current) {
-      // The car remains parked through the entire timeline now (no Outro drive-off)
       easing.damp(outerGroup.current.position, 'z', 0, 0.2, delta);
     }
 
-    // Dynamic Engine Start Headlight Emissive Logic
     if (materials.glass_light) {
-      // Ensure the material is configured for extreme Bloom
-      materials.glass_light.emissive = new THREE.Color("#ff0000"); // Red Demon Eyes
+      materials.glass_light.emissive = new THREE.Color("#ff0000"); 
       materials.glass_light.toneMapped = false;
       
-      // 1. DYNAMIC SWEEP ANIMATION (Draws the line down natively in the shader)
       if (materials.glass_light.userData.shader && nodes.car_dodge_viper_acrglass_glass_LOD2_UV1_Untitled_067_Default_glass_light_0) {
         const headlightMesh = nodes.car_dodge_viper_acrglass_glass_LOD2_UV1_Untitled_067_Default_glass_light_0;
         const minY = headlightMesh.geometry.boundingBox.min.y;
         const maxY = headlightMesh.geometry.boundingBox.max.y;
-        const finalThreshold = minY + (maxY - minY) * 0.15; // The 15% mark
+        const finalThreshold = minY + (maxY - minY) * 0.15; 
         
-        let sweepProgress = Math.min(1, progress / 0.05); // Sweeps continuously from 0.00 to 0.05
-        
-        // Starts fully off (at maxY) and sweeps down towards finalThreshold
+        let sweepProgress = Math.min(1, progress / 0.05); 
         const animatedThreshold = maxY - (maxY - finalThreshold) * sweepProgress;
         materials.glass_light.userData.shader.uniforms.uGlowThreshold.value = animatedThreshold;
       }
       
-      // 2. BREATHING IDLE ANIMATION
       let targetGlow = 0;
       if (progress < 0.9) {
-        // Base glow of 15 + a sinister breathing pulse (+/- 4) based on time
         targetGlow = 15 + Math.sin(state.clock.elapsedTime * 3) * 4;
       }
       
@@ -98,10 +85,6 @@ export default function CarModel(props: any) {
   return (
     <group ref={outerGroup} position={[0, 0, 0]}>
       <group ref={chassisGroup} {...props} dispose={null} position={[0, -1, 0]}>
-        {/* 
-          The Viper's nodes and materials 
-          (I've kept the original mapping, just adding a slight position offset to center it)
-        */}
       <group rotation={[-Math.PI / 2, 0, -Math.PI]}>
         <group rotation={[Math.PI / 2, 0, 0]} scale={2}>
           <group rotation={[-0.039, 0, 0]}>
@@ -184,7 +167,9 @@ export default function CarModel(props: any) {
       </group>
     </group>
     </group>
-  )
+  );
 }
 
-useGLTF.preload('/2016_dodge_viper_acr.glb')
+export default React.memo(CarModel);
+
+useGLTF.preload('/2016_dodge_viper_acr.glb');

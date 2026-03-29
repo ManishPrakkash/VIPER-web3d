@@ -7,8 +7,8 @@ export default function EffectsSetup() {
     <EffectComposer>
       <Bloom 
         luminanceThreshold={0.5} 
-        luminanceSmoothing={0.9} 
-        intensity={1.2} 
+        luminanceSmoothing={1} // Performance: Smoother glow at lower intensity
+        intensity={0.8} // Performance: Reduced for better GPU stability
         mipmapBlur 
       />
       

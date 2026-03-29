@@ -58,7 +58,8 @@ export default function CanvasScene() {
       shadows={{ type: THREE.PCFShadowMap }}
       gl={{ antialias: false, powerPreference: "high-performance" }}
       camera={{ position: [0, 2, 10], fov: 45 }}
-      dpr={[1, 2]}
+      dpr={[1, 1.5]} // Performance: Optimized for Retina/4K
+      performance={{ min: 0.5 }} // Performance: Allow auto-scaling
     >
       <color attach="background" args={["#020202"]} />
       
@@ -75,14 +76,14 @@ export default function CanvasScene() {
         <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.99, 0]}>
           <planeGeometry args={[100, 100]} />
           <MeshReflectorMaterial
-            blur={[50, 50]}
-            resolution={512}
-            mixBlur={0.5}
+            blur={[300, 100]} // Performance: Heavier blur to mask lower resolution
+            resolution={256} // Performance: Lowered from 512 for better FPS
+            mixBlur={1}
             mixStrength={40}
-            roughness={0.2}
-            depthScale={1}
-            minDepthThreshold={0.5}
-            maxDepthThreshold={1.5}
+            roughness={1}
+            depthScale={1.2}
+            minDepthThreshold={0.4}
+            maxDepthThreshold={1.4}
             color="#050505"
             metalness={0.8}
             mirror={1}

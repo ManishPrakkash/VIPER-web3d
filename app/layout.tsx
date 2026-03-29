@@ -9,6 +9,9 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "V I P E R - manishmellow",
   description: "A cinematic 3D sports car experience.",
+  icons: {
+    icon: "/assets/image.png",
+  },
 };
 
 export default function RootLayout({
