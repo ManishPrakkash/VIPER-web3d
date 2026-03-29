@@ -21,11 +21,16 @@ export default function CameraRig() {
     // Synchronized with LoadingScreen exit
     const cameraAsAny = camera as any;
     if (cameraAsAny.isPerspectiveCamera) {
+      // Dynamic FOV for mobile: Higher FOV (wider) for portrait screens
+      const isMobile = window.innerWidth < 768;
+      const aspect = window.innerWidth / window.innerHeight;
+      const targetFov = aspect < 1 ? 55 : 45; // Wider for mobile portrait
+
       cameraAsAny.fov = 65; 
       cameraAsAny.updateProjectionMatrix();
 
       gsap.to(cameraAsAny, {
-        fov: 45, // "Zoom" into the car
+        fov: targetFov, 
         duration: 2.5,
         delay: 1.5,
         ease: "expo.out",
