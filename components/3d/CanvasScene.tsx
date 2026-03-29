@@ -33,24 +33,27 @@ function AnimatedText() {
 
   return (
     <group ref={textGroupRef} position={[0, 1.5, -8]}>
+      {/* 1. Top Brand Tag (Red) */}
+      <Text
+        fontSize={subFontSize}
+        color="#b91c1c" // Racing Red
+        anchorX="center"
+        anchorY="middle"
+        letterSpacing={0.6 * mobileScale}
+        position={[0, 3.8 * mobileScale, 0]} 
+      >
+        M A N I S H M E L L O W
+      </Text>
+
+      {/* 2. Main Title (Grey) */}
       <Text
         fontSize={mainFontSize}
-        color="#2a2a2a" // Dark grey so it reveals softly 
+        color="#2a2a2a" // Space Grey 
         anchorX="center"
         anchorY="middle"
         position={[0, 0.8, 0]}
       >
         ᐯ丨卩 乇 尺
-      </Text>
-      <Text
-        fontSize={subFontSize}
-        color="#ffffff" // Changed to white as requested (only Manishmellow red)
-        anchorX="center"
-        anchorY="middle"
-        letterSpacing={0.5 * mobileScale}
-        position={[0, 3.6 * mobileScale, 0]} 
-      >
-        A E R O D Y N A M I C S  P E R F E C T E D
       </Text>
     </group>
   );
