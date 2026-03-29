@@ -5,11 +5,24 @@ import { useEffect, useState, useRef, useCallback } from "react";
 import gsap from "gsap";
 
 export default function LoadingScreen() {
-  const { progress, active } = useProgress();
+  const { progress } = useProgress();
+  const [visualProgress, setVisualProgress] = useState(0);
   const [isVisible, setIsVisible] = useState(true);
   const containerRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const [hasStartedTransition, setHasStartedTransition] = useState(false);
+
+  // Sync visual progress with Drei's progress using GSAP for buttery smooth updates
+  useEffect(() => {
+    gsap.to({ val: visualProgress }, {
+      val: progress,
+      duration: 0.5,
+      ease: "power2.out",
+      onUpdate: function() {
+        setVisualProgress(this.targets()[0].val);
+      }
+    });
+  }, [progress]);
 
   const startTransition = useCallback(() => {
     if (hasStartedTransition) return;
@@ -35,11 +48,12 @@ export default function LoadingScreen() {
   }, [hasStartedTransition]);
 
   useEffect(() => {
-    if (progress >= 100 && !hasStartedTransition) {
+    // Only transition when VISUAL progress is actually 100
+    if (visualProgress >= 100 && !hasStartedTransition) {
       const timer = setTimeout(startTransition, 800);
       return () => clearTimeout(timer);
     }
-  }, [progress, hasStartedTransition, startTransition]);
+  }, [visualProgress, hasStartedTransition, startTransition]);
 
   if (!isVisible) return null;
 
@@ -47,9 +61,9 @@ export default function LoadingScreen() {
     <div 
       ref={containerRef}
       className={`fixed inset-0 z-[100] flex flex-col items-center justify-center bg-[#020202] ${
-        progress >= 100 ? "cursor-pointer" : ""
+        visualProgress >= 100 ? "cursor-pointer" : ""
       }`}
-      onClick={() => progress >= 100 && startTransition()}
+      onClick={() => visualProgress >= 100 && startTransition()}
     >
       <div ref={contentRef} className="flex flex-col gap-6 w-full max-w-sm px-10 items-center select-none">
         
@@ -65,17 +79,17 @@ export default function LoadingScreen() {
         {/* Minimalist Bar */}
         <div className="w-full h-[1px] bg-white/10 relative overflow-hidden">
           <div 
-            className="absolute left-0 top-0 h-full bg-white transition-all duration-300 ease-out"
-            style={{ width: `${progress}%` }}
+            className="absolute left-0 top-0 h-full bg-white"
+            style={{ width: `${visualProgress}%` }}
           />
         </div>
 
         {/* HUD Info */}
         <div className="w-full flex justify-between items-start font-mono text-[10px] tracking-widest text-white uppercase opacity-60">
           <div className="flex flex-col gap-1">
-            <span>{progress < 100 ? "Syncing..." : "Ready"}</span>
+            <span>{visualProgress < 100 ? "Syncing..." : "Ready"}</span>
           </div>
-          <span className="text-xl font-bold">{progress.toFixed(0)}%</span>
+          <span className="text-xl font-bold">{visualProgress.toFixed(0)}%</span>
         </div>
       </div>
     </div>
