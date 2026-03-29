@@ -82,15 +82,15 @@ export default function Overlay() {
       
       {/* 1. HUD: Coordinates & Tech Specs (Fades out Outro) */}
       <div ref={hudRef} className="absolute inset-0 flex flex-col justify-between transition-opacity duration-500">
-        <div className="w-full flex justify-between items-start p-8 hud-text mix-blend-difference">
-          <div className="flex flex-col gap-1">
+        <div className="w-full flex justify-between items-start p-4 sm:p-8 hud-text mix-blend-difference text-[8px] sm:text-xs">
+          <div className="flex flex-col gap-0.5 sm:gap-1">
             <span>LAT: 10.827361° N</span>
             <span>LNG: 77.060471° E</span>
-            <span className="text-white">MANISHMELLOW GARAGE // VIPER</span>
+            <span className="text-white">MANISHMELLOW GARAGE</span>
           </div>
-          <div className="flex flex-col gap-1 items-end">
-            <span className="text-white text-2xl font-bold">{rpm} RPM</span>
-            <span className="text-xl">{speed} MPH</span>
+          <div className="flex flex-col gap-0.5 sm:gap-1 items-end">
+            <span className="text-white text-base sm:text-2xl font-bold">{rpm} RPM</span>
+            <span className="text-sm sm:text-xl">{speed} MPH</span>
           </div>
         </div>
 
@@ -108,78 +108,79 @@ export default function Overlay() {
         </div>
 
         {/* Profile / Chassis */}
-        <div ref={rimRef} className="absolute left-10 md:left-24 transition-opacity duration-700 opacity-0 mix-blend-screen">
-          <h2 className="text-4xl md:text-6xl text-white font-black uppercase tracking-tighter drop-shadow-lg">
+        <div ref={rimRef} className="absolute left-6 md:left-24 transition-opacity duration-700 opacity-0 mix-blend-screen">
+          <h2 className="text-3xl sm:text-4xl md:text-6xl text-white font-black uppercase tracking-tighter drop-shadow-lg leading-tight">
             Structural <br /> <span className="text-red-500">Geometry</span>
           </h2>
-          <p className="font-mono text-xs md:text-sm mt-6 max-w-md text-white/80 leading-relaxed uppercase tracking-widest border-l border-red-500 pl-4">
-            Flawless 50/50 weight distribution.<br /> Magnesium Cowl framework. <br /><br /> Engineered for absolute lateral G-force control and unsprung mass minimization.
+          <p className="font-mono text-[9px] sm:text-xs md:text-sm mt-4 md:mt-6 max-w-[240px] md:max-w-md text-white/80 leading-relaxed uppercase tracking-widest border-l border-red-500 pl-3 md:pl-4">
+            Flawless 50/50 weight distribution.<br /> Magnesium Cowl framework. <br /><br /> Engineered for absolute lateral G-force control.
           </p>
         </div>
 
         {/* Powertrain / High-Angle */}
-        <div ref={engineRef} className="absolute inset-y-0 right-10 md:right-24 flex flex-col justify-center transition-opacity duration-700 opacity-0 mix-blend-difference text-right items-end">
-          <h2 className="text-6xl md:text-8xl font-black text-white tracking-tighter mix-blend-difference">
+        <div ref={engineRef} className="absolute inset-y-0 right-6 md:right-24 flex flex-col justify-center transition-opacity duration-700 opacity-0 mix-blend-difference text-right items-end">
+          <h2 className="text-5xl sm:text-6xl md:text-8xl font-black text-white tracking-tighter mix-blend-difference">
             8.4L V10
           </h2>
-          <div className="w-16 h-1 bg-red-600 my-4" />
-          <p className="font-mono text-xs md:text-sm text-white/80 uppercase tracking-[0.2em] leading-loose max-w-sm">
+          <div className="w-10 md:w-16 h-1 bg-red-600 my-2 md:my-4" />
+          <p className="font-mono text-[9px] sm:text-xs md:text-sm text-white/80 uppercase tracking-widest md:tracking-[0.2em] leading-loose max-w-[200px] md:max-w-sm">
             Naturally Aspirated Core.<br />
             645 Horsepower.<br />
             600 LB-FT Torque. <br /><br />
-            Pure analog combustion housed in a hyper-aerodynamic shell.
+            Pure analog combustion.
           </p>
         </div>
 
         {/* Aero / Roof Sweep */}
-        <div ref={aeroRef} className="absolute bottom-32 left-10 md:left-24 transition-opacity duration-700 opacity-0 mix-blend-difference">
-          <h2 className="text-5xl md:text-7xl font-black text-white uppercase tracking-tight">
+        <div ref={aeroRef} className="absolute bottom-24 left-6 md:left-24 transition-opacity duration-700 opacity-0 mix-blend-difference">
+          <h2 className="text-4xl sm:text-5xl md:text-7xl font-black text-white uppercase tracking-tight">
             Maximum <br /> Downforce
           </h2>
-          <p className="font-mono text-white/80 mt-6 tracking-[0.3em] uppercase text-xs md:text-sm">
+          <p className="font-mono text-white/80 mt-4 md:mt-6 tracking-widest md:tracking-[0.3em] uppercase text-[9px] sm:text-xs md:text-sm">
             CARBON FIBER EXTREME AERO WING
           </p>
-          <div className="flex gap-8 mt-6 font-mono text-red-500 text-sm tracking-widest">
+          <div className="flex gap-4 md:gap-8 mt-4 md:mt-6 font-mono text-red-500 text-[10px] md:text-sm tracking-widest">
             <div>
-              <span className="block text-white font-bold text-lg mb-1">1,533 LBS</span>
+              <span className="block text-white font-bold text-sm md:text-lg mb-1">1,533 LBS</span>
               <span>DOWNFORCE</span>
             </div>
             <div>
-              <span className="block text-white font-bold text-lg mb-1">150 MPH</span>
+              <span className="block text-white font-bold text-sm md:text-lg mb-1">150 MPH</span>
               <span>VELOCITY</span>
             </div>
           </div>
         </div>
 
         {/* Interior / Door Sweep */}
-        <div ref={interiorRef} className="absolute inset-y-0 right-10 md:right-24 flex items-center transition-opacity duration-700 opacity-0 text-right justify-end">
-          <div className="flex flex-col gap-6 border-r-4 border-red-600 pr-8 mix-blend-difference items-end">
-            <h2 className="text-5xl md:text-7xl text-white font-black tracking-tight uppercase leading-none">
+        <div ref={interiorRef} className="absolute inset-y-0 right-6 md:right-24 flex items-center transition-opacity duration-700 opacity-0 text-right justify-end">
+          <div className="flex flex-col gap-4 md:gap-6 border-r-2 md:border-r-4 border-red-600 pr-4 md:pr-8 mix-blend-difference items-end">
+            <h2 className="text-4xl sm:text-5xl md:text-7xl text-white font-black tracking-tight uppercase leading-none">
               Driver <br /> Centric
             </h2>
-            <div className="flex flex-col gap-6 mt-4 text-white/80 font-mono text-sm tracking-widest text-right">
-              <div className="flex flex-col gap-1 items-end">
-                <span className="text-white font-bold">TRANSMISSION</span>
-                <span>TREMEC TR6060 MANUAL</span>
+            <div className="flex flex-col gap-3 md:gap-6 mt-2 md:mt-4 text-white/80 font-mono text-[10px] md:text-sm tracking-widest text-right">
+              <div className="flex flex-col gap-0.5 md:gap-1 items-end">
+                <span className="text-white font-bold text-xs md:text-sm">TRANSMISSION</span>
+                <span>TREMEC MANUAL</span>
               </div>
-              <div className="flex flex-col gap-1 items-end">
-                <span className="text-white font-bold">MATERIALS</span>
-                <span>ALCANTARA & CARBON FIBER</span>
+              <div className="flex flex-col gap-0.5 md:gap-1 items-end">
+                <span className="text-white font-bold text-xs md:text-sm">MATERIALS</span>
+                <span>CARBON FIBER</span>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Cinematic Outro Typography */}
-        <div ref={outroRef} className="absolute inset-0 w-full flex flex-col items-center justify-start pt-[15vh] transition-opacity duration-1000 opacity-0 z-50 pointer-events-none">
-          <h1 className="text-white/20 text-7xl md:text-9xl font-black tracking-[0.1em] mix-blend-screen drop-shadow-lg">
+        <div ref={outroRef} className="absolute inset-0 w-full flex flex-col items-center justify-start pt-[18vh] transition-opacity duration-1000 opacity-0 z-50 pointer-events-none text-center">
+          {/* USER Hierarchy: Mallow TOP, then Viper, then Aero Bottom */}
+          <span className="text-red-700 font-mono tracking-[0.4em] text-[12px] md:text-base font-bold drop-shadow-[0_0_10px_rgba(185,28,28,0.4)] mb-4">
+            MANISHMELLOW
+          </span>
+          <h1 className="text-white/20 text-5xl sm:text-7xl md:text-9xl font-black tracking-[0.1em] mix-blend-screen drop-shadow-lg whitespace-nowrap">
             ᐯ丨卩 乇 尺
           </h1>
-          <div className="flex items-center gap-4 md:gap-8 mt-6 text-red-600 font-mono tracking-[0.2em] md:tracking-[0.4em] text-xs md:text-sm mix-blend-difference">
-            <span>AERODYNAMICS PERFECTED</span>
-            <span>//</span>
-            <span>MANISHMELLOW</span>
-          </div>
+          <span className="text-white/40 font-mono tracking-[0.2em] text-[10px] md:text-xs mt-6">
+            AERODYNAMICS PERFECTED
+          </span>
         </div>
 
       </div>

@@ -9,13 +9,19 @@ import CarModel from "./CarModel";
 import CameraRig from "./CameraRig";
 import EffectsSetup from "./Effects";
 import { useScrollStore } from '@/store/useScrollStore';
-import { useFrame } from '@react-three/fiber';
+import { useFrame, useThree } from '@react-three/fiber';
 import { useRef } from 'react';
 import { easing } from 'maath';
 
 function AnimatedText() {
   const textGroupRef = useRef<THREE.Group>(null);
   const progress = useScrollStore((state) => state.progress);
+  const { viewport } = useThree();
+
+  // Responsive Scaling: Adjust font size based on screen width
+  const mobileScale = Math.min(viewport.width / 4, 1);
+  const mainFontSize = 4 * mobileScale;
+  const subFontSize = 0.35 * mobileScale;
 
   useFrame((state, delta) => {
     if (textGroupRef.current) {
@@ -28,7 +34,7 @@ function AnimatedText() {
   return (
     <group ref={textGroupRef} position={[0, 1.5, -8]}>
       <Text
-        fontSize={4}
+        fontSize={mainFontSize}
         color="#2a2a2a" // Dark grey so it reveals softly 
         anchorX="center"
         anchorY="middle"
@@ -37,14 +43,14 @@ function AnimatedText() {
         ᐯ丨卩 乇 尺
       </Text>
       <Text
-        fontSize={0.35}
-        color="#6a0000" // Very dark, muted cinematic red (not flashy)
+        fontSize={subFontSize}
+        color="#ffffff" // Changed to white as requested (only Manishmellow red)
         anchorX="center"
         anchorY="middle"
-        letterSpacing={0.6}
-        position={[0, 3.6, 0]} // Pushed higher to create more negative space
+        letterSpacing={0.5 * mobileScale}
+        position={[0, 3.6 * mobileScale, 0]} 
       >
-        M A N I S H M E L L O W
+        A E R O D Y N A M I C S  P E R F E C T E D
       </Text>
     </group>
   );
