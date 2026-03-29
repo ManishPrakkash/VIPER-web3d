@@ -6,6 +6,7 @@ import { useScrollStore } from '@/store/useScrollStore';
 
 function LenisScrollSync() {
   const setProgress = useScrollStore((state) => state.setProgress);
+  const setIsScrolling = useScrollStore((state) => state.setIsScrolling);
   
   // 1. Force the experience to start at '0%' on page refresh
   useEffect(() => {
@@ -17,13 +18,32 @@ function LenisScrollSync() {
     // Jump to top immediately and reset our global progress state
     window.scrollTo(0, 0);
     setProgress(0);
-  }, [setProgress]);
+    setIsScrolling(false);
+  }, [setProgress, setIsScrolling]);
 
-  // 2. Use useLenis animation frame callback to continuously update Zustand state
+  // 2. Use useLenis for granular scroll events
   useLenis((e: any) => {
     setProgress(e.progress);
   });
   
+  // 3. Track scroll state to toggle Dynamic Fidelity
+  const lenis = useLenis();
+  useEffect(() => {
+    if (!lenis) return;
+    
+    const handleScroll = (e: any) => {
+      // Threshold velocity to determine when to snap back to High-Quality
+      if (Math.abs(e.velocity) < 0.1) setIsScrolling(false);
+      else setIsScrolling(true);
+    };
+
+    lenis.on('scroll', handleScroll);
+
+    return () => {
+      lenis.off('scroll', handleScroll);
+    };
+  }, [lenis, setIsScrolling]);
+
   return null;
 }
 

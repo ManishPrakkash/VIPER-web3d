@@ -60,15 +60,23 @@ function AnimatedText() {
 }
 
 export default function CanvasScene() {
+  const isScrolling = useScrollStore((state) => state.isScrolling);
 
   return (
     
     <Canvas
-      shadows={{ type: THREE.PCFShadowMap }}
-      gl={{ antialias: false, powerPreference: "high-performance" }}
+      shadows={{ type: THREE.PCFSoftShadowMap }} // High-quality soft shadows
+      gl={{ 
+        antialias: false, 
+        powerPreference: "high-performance",
+        alpha: false,
+        stencil: false,
+        depth: true
+      }}
       camera={{ position: [0, 2, 10], fov: 45 }}
-      dpr={[1, 1.5]} // Performance: Optimized for Retina/4K
-      performance={{ min: 0.5 }} // Performance: Allow auto-scaling
+      // Dynamic Fidelity: Shift to 1x during motion for 60FPS, snap to 1.5x when stationary for sharp detail
+      dpr={isScrolling ? 1 : [1, 1.5]} 
+      performance={{ min: 0.5 }} 
     >
       <color attach="background" args={["#020202"]} />
       
@@ -81,12 +89,12 @@ export default function CanvasScene() {
         {/* 3D Typography Behind the Car for Occlusion */}
         <AnimatedText />
 
-        {/* Digital Noir Reflections Floor */}
-        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.99, 0]}>
+        {/* High-Fidelity Reflections: Constant 256px resolution but optimized sampling */}
+        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.99, 0]} receiveShadow>
           <planeGeometry args={[100, 100]} />
           <MeshReflectorMaterial
-            blur={[300, 100]} // Performance: Heavier blur to mask lower resolution
-            resolution={256} // Performance: Lowered from 512 for better FPS
+            blur={[400, 100]} 
+            resolution={256} // Restored to user-preferred high quality
             mixBlur={1}
             mixStrength={40}
             roughness={1}

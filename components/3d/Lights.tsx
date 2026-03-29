@@ -45,6 +45,7 @@ export default function Lights() {
         intensity={0}
         color="#ffffff" 
         castShadow
+        shadow-mapSize={[1024, 1024]} // Quality / Performance sweet spot
         distance={30}
         decay={2}
       />
