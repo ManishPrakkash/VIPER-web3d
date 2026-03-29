@@ -17,11 +17,27 @@ export default function CameraRig() {
   const lookAtPos = useMemo(() => new THREE.Vector3(0, 0.5, 0), []);
 
   useEffect(() => {
+    // 0. Cinematic Launch Sequence (Racing Theme)
+    // Synchronized with LoadingScreen exit
+    const cameraAsAny = camera as any;
+    if (cameraAsAny.isPerspectiveCamera) {
+      cameraAsAny.fov = 65; 
+      cameraAsAny.updateProjectionMatrix();
+
+      gsap.to(cameraAsAny, {
+        fov: 45, // "Zoom" into the car
+        duration: 2.5,
+        delay: 1.5,
+        ease: "expo.out",
+        onUpdate: () => cameraAsAny.updateProjectionMatrix()
+      });
+    }
+
     // Total duration is 1 arbitrarily, we scrub 0->1
     const timeline = gsap.timeline({ paused: true });
 
     // Initial State: Smooth, wide tracking from further back
-    camPos.set(0, 1.5, 12);
+    camPos.set(0, 1.5, 14); // Slightly further back for the launch zoom
     lookAtPos.set(0, 0.5, 0);
 
     // 1. Intro -> Front 3/4 Sweeping (Progress 0 -> 0.16)
@@ -53,38 +69,20 @@ export default function CameraRig() {
     return () => {
       timeline.kill();
     };
-  }, [camPos, lookAtPos]);
+  }, [camera, camPos, lookAtPos]);
 
   useFrame((state, delta) => {
     if (tl.current) {
-      // 1. Apply GSAP timeline to dummy objects
       tl.current.progress(progress);
-
-      // 2. Dampen actual camera position to dummy targets (Creates cinematic inertia)
       easing.damp3(camera.position, camPos, 0.4, delta);
-      
-      // Dampen a local lookAt vector and apply to camera
-      // Also sync it to Zustand so Effects.tsx (DOF) focuses accurately!
-      const currentLookAt = new THREE.Vector3();
-      camera.getWorldDirection(currentLookAt); 
-      // Instead of getting world dir, let's keep a stateful Vector for lookAt
-      // We will read from the global state, dampen it, write back, and apply.
-      const targetVec = state.camera.clone().position.add(lookAtPos.clone().sub(state.camera.position));
-      
-      // Wait, simpler: damp a local ref vector toward lookAtPos, then camera.lookAt it
     }
   });
 
   const actualLookAt = useRef(new THREE.Vector3(0, 0.5, 0));
 
   useFrame((state, delta) => {
-    // Dampen local LookAt towards GSAP target
     easing.damp3(actualLookAt.current, lookAtPos, 0.4, delta);
-    
-    // Apply camera
     camera.lookAt(actualLookAt.current);
-
-    // Sync focal point to Zustand for DepthOfField
     setCameraTarget(actualLookAt.current.clone());
   });
 

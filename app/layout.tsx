@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { LenisProvider } from "./providers/LenisProvider";
+import LoadingScreen from "@/components/ui/LoadingScreen";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -16,8 +17,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
-      <body className={`${inter.className} antialiased selection:bg-white/20`}>
+    <html lang="en" className="dark" dir="ltr">
+      <body className={`${inter.className} antialiased selection:bg-white/20 overflow-x-hidden bg-black`}>
+        <LoadingScreen />
         <LenisProvider>
           {children}
         </LenisProvider>

@@ -2,6 +2,7 @@
 
 import { useScrollStore } from "@/store/useScrollStore";
 import { useEffect, useRef, useState } from "react";
+import gsap from "gsap";
 
 export default function Overlay() {
   const progress = useScrollStore((state) => state.progress);
@@ -20,7 +21,33 @@ export default function Overlay() {
   const outroRef = useRef<HTMLDivElement>(null);
   const blurOverlayRef = useRef<HTMLDivElement>(null);
 
-  // Sync GSAP timeline logic mapping to the 0-1 progress
+  // 1. Initial GSAP Entrance (Racing HUD Boot-up)
+  useEffect(() => {
+    const tl = gsap.timeline();
+    
+    // Hide initially to prevent flash
+    gsap.set([hudRef.current, heroRef.current], { opacity: 0 });
+
+    tl.to(hudRef.current, {
+      opacity: 1,
+      duration: 0.1,
+      repeat: 3,
+      yoyo: true, // Flicker effect
+      delay: 1.5, // Wait for loading screen to start fading
+    })
+    .to(hudRef.current, {
+      opacity: 1,
+      duration: 0.5,
+      ease: "power2.out"
+    })
+    .fromTo(heroRef.current, 
+      { opacity: 0, y: 20 },
+      { opacity: 1, y: 0, duration: 1, ease: "power3.out" },
+      "-=0.2"
+    );
+  }, []);
+
+  // 2. Sync GSAP timeline logic mapping to the 0-1 progress
   useEffect(() => {
     // Telemetry Animation
     setRpm(Math.floor(Math.min(8400, progress * 15000)));
@@ -67,16 +94,7 @@ export default function Overlay() {
           </div>
         </div>
 
-        {/* 3. HUD: Scroll Track */}
-        <div className="w-full flex items-end p-8 hud-text mix-blend-difference pb-12">
-          <div className="w-1/3 h-[1px] bg-white/20 relative">
-            <div 
-              className="absolute left-0 top-0 h-full bg-white transition-all ease-out"
-              style={{ width: `${progress * 100}%` }}
-            />
-          </div>
-          <span className="ml-4">{(progress * 100).toFixed(0)}%</span>
-        </div>
+        {/* No scroll track as per user request for cleaner experience */}
       </div>
 
       {/* 2. Scenes Container */}
