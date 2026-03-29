@@ -82,15 +82,24 @@ export default function Overlay() {
       
       {/* 1. HUD: Coordinates & Tech Specs (Fades out Outro) */}
       <div ref={hudRef} className="absolute inset-0 flex flex-col justify-between transition-opacity duration-500">
-        <div className="w-full flex justify-between items-start p-4 sm:p-8 hud-text mix-blend-difference text-[8px] sm:text-xs">
-          <div className="flex flex-col gap-0.5 sm:gap-1">
-            <span>LAT: 10.827361° N</span>
-            <span>LNG: 77.060471° E</span>
-            <span className="text-white">MANISHMELLOW GARAGE</span>
+        <div className="w-full flex justify-between items-start p-4 sm:p-8 hud-text mix-blend-difference text-[7px] sm:text-xs">
+          {/* Coordinates - Stacked tighter on mobile */}
+          <div className="flex flex-col gap-0 sm:gap-1">
+            <span>LAT: 10.82° N</span>
+            <span>LNG: 77.06° E</span>
+            <span className="text-white mt-1 opacity-80 sm:opacity-100">GARAGE // VIPER</span>
           </div>
-          <div className="flex flex-col gap-0.5 sm:gap-1 items-end">
-            <span className="text-white text-base sm:text-2xl font-bold">{rpm} RPM</span>
-            <span className="text-sm sm:text-xl">{speed} MPH</span>
+
+          {/* Telemetry - Simplified for mobile to prevent horizontal bleed */}
+          <div className="flex flex-col gap-0 sm:gap-1 items-end">
+            <div className="flex items-baseline gap-1">
+              <span className="text-white text-sm sm:text-2xl font-bold">{rpm}</span>
+              <span className="opacity-60 text-[6px] sm:text-xs">RPM</span>
+            </div>
+            <div className="flex items-baseline gap-1">
+              <span className="text-white text-xs sm:text-xl font-medium">{speed}</span>
+              <span className="opacity-60 text-[6px] sm:text-xs">MPH</span>
+            </div>
           </div>
         </div>
 
